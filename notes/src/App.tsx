@@ -1,12 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Note from "./components/Note";
 import { NoteType } from "./main";
+import axios from "axios";
 
-type AppProps = {
-  props: NoteType[];
-};
-const App: React.FC<AppProps> = ({ props }) => {
-  const [notes, setNotes] = useState(props);
+const App = () => {
+  const [notes, setNotes] = useState<NoteType[]>([]);
   const [newNote, setNewNote] = useState("");
   const [showAll, setshowAll] = useState(true);
 
@@ -30,6 +28,15 @@ const App: React.FC<AppProps> = ({ props }) => {
   const notesToShow = showAll
     ? notes
     : notes.filter((note) => note.important === true);
+
+  useEffect(() => {
+    console.log("effect");
+    axios.get("http://localhost:3001/notes").then((response) => {
+      console.log("promise fulfilled");
+      setNotes(response.data);
+    });
+  }, []);
+  console.log("render", notes.length, "notes");
 
   return (
     <div>
