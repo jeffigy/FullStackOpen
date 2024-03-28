@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 
 export type NoteType = {
-  id: number;
+  id: string;
   content: string;
   important: boolean;
 };

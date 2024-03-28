@@ -2,16 +2,14 @@ import { useEffect, useState } from "react";
 import Persons from "./components/Persons";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
-import axios, { AxiosResponse } from "axios";
-
+import personService from "./services/persons";
 export type ContactPerson = {
   name: string;
   number: string;
-  id: number;
+  id: string;
 };
 const App = () => {
   const [persons, setPersons] = useState<ContactPerson[]>([]);
-
   const [searchInput, setSearchInput] = useState("");
 
   const getSearchDataFromChild = (data: string) => {
@@ -22,6 +20,9 @@ const App = () => {
     setPersons(data);
   };
 
+  const getUpdatedDataFromChild = (data: ContactPerson[]) => {
+    setPersons(data);
+  };
   const filterContacts =
     searchInput === ""
       ? persons
@@ -30,9 +31,8 @@ const App = () => {
         );
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((res: AxiosResponse) => {
-      const contacts = res.data;
-      setPersons(contacts);
+    personService.getAllPerson().then((data) => {
+      setPersons(data);
     });
   }, []);
 
@@ -42,7 +42,10 @@ const App = () => {
       <Filter sendDataToParent={getSearchDataFromChild} />
       <PersonForm sendNewDataToParent={getNewDataFromChild} persons={persons} />
       <h2>Numbers</h2>
-      <Persons contactList={filterContacts} />
+      <Persons
+        persons={filterContacts}
+        sendUpdatedDataToParent={getUpdatedDataFromChild}
+      />
     </div>
   );
 };
