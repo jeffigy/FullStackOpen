@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import { ContactPerson } from "../App";
+import { ContactPerson, ErrorMessage } from "../App";
 import personService from "../services/persons";
 type PersonFormProps = {
   persons: ContactPerson[];
   sendNewDataToParent: (data: ContactPerson[]) => void;
+  sendNotificationToParent: (data: ErrorMessage) => void;
 };
 
 const PersonForm: React.FC<PersonFormProps> = ({
   persons,
   sendNewDataToParent,
+  sendNotificationToParent,
 }) => {
   const [newPerson, setNewPerson] = useState({
     name: "",
@@ -51,6 +53,12 @@ const PersonForm: React.FC<PersonFormProps> = ({
                 person.id !== contactPerson!.id ? person : returnedPerson
               )
             );
+          })
+          .catch((_error) => {
+            sendNotificationToParent({
+              message: `Information of ${contactPerson?.name} has been removed from server`,
+              type: "error",
+            });
           });
         setNewPerson({
           name: "",
@@ -60,7 +68,13 @@ const PersonForm: React.FC<PersonFormProps> = ({
     } else {
       personService.newPerson(newContact).then((res) => {
         sendNewDataToParent(persons.concat(res));
-        alert(`${newPerson.name} successfully added to the phonebook`);
+        sendNotificationToParent({
+          message: `Added ${newPerson.name}`,
+          type: "success",
+        });
+        setTimeout(() => {
+          sendNotificationToParent({ message: null, type: null });
+        }, 5000);
         setNewPerson({
           name: "",
           number: "",
