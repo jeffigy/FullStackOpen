@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { CountryType } from "./services/country";
 import countryServices from "./services/countries";
+import CountryList from "./components/CountryList";
+import CountryDetails from "./components/CountryDetails";
 const App = () => {
   const [searchInput, setSearchInput] = useState<string>("");
   const [countries, setcountries] = useState<CountryType[] | null>(null);
@@ -64,44 +66,10 @@ const App = () => {
               <div>
                 {filteredCountries.map((country: CountryType) => {
                   return (
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "10px",
-                        alignItems: "flex-start",
-                      }}
+                    <CountryDetails
+                      country={country}
                       key={country.name.common}
-                    >
-                      {" "}
-                      <h1>{country.name.common}</h1>
-                      <div
-                        style={{
-                          lineHeight: "0.3",
-                        }}
-                      >
-                        {" "}
-                        <p>Capital: {country.capital}</p>
-                        <p>Area: {country.area}</p>
-                      </div>
-                      <div>
-                        <h2>Languages:</h2>
-
-                        <ul>
-                          {Object.entries(country.languages).map(
-                            ([code, language]) => (
-                              <li key={code}>{language}</li>
-                            )
-                          )}
-                        </ul>
-                      </div>
-                      <img
-                        src={country.flags.svg}
-                        style={{
-                          height: "100px",
-                        }}
-                      />
-                    </div>
+                    />
                   );
                 })}
               </div>
@@ -116,13 +84,3 @@ const App = () => {
 };
 
 export default App;
-
-const CountryList = ({ countries }: { countries: CountryType[] }) => {
-  return (
-    <>
-      {countries.map((country: CountryType) => {
-        return <p key={country.name.common}>{country.name.common}</p>;
-      })}
-    </>
-  );
-};
