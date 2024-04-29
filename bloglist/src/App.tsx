@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import blogsService from "./services/blog";
 import { BlogType, LoggedUserType } from "./types";
 import loginServices from "./services/login";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [blogs, setBlogs] = useState<BlogType[]>([]);
@@ -10,6 +11,10 @@ const App = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
+  const [notifMessage, setNotifMessage] = useState<string | null>("");
+  const [notifType, setNotifType] = useState<
+    "success" | "error" | null | undefined
+  >();
   const [user, setUser] = useState<LoggedUserType | null>(null);
 
   useEffect(() => {
@@ -29,18 +34,35 @@ const App = () => {
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!username || !password) {
+      setNotifMessage("All fields are required");
+      setNotifType("error");
+      setTimeout(() => {
+        setNotifMessage(null);
+        setNotifType(null);
+      }, 5000);
+      return;
+    }
+
     try {
       const user = await loginServices.login({
         username,
         password,
       });
+
       window.localStorage.setItem("user", JSON.stringify(user));
       blogsService.setToken(user.token);
       setUser(user);
       setUsername("");
       setPassword("");
     } catch (error) {
-      console.log(error);
+      setNotifMessage("Account not found");
+      setNotifType("error");
+      setTimeout(() => {
+        setNotifMessage(null);
+        setNotifType(null);
+      }, 5000);
     }
   };
 
@@ -53,7 +75,13 @@ const App = () => {
     e.preventDefault();
 
     if (title === "" || author === "" || url === "") {
-      return console.log("all fields are required");
+      setNotifMessage("All fields are required");
+      setNotifType("error");
+      setTimeout(() => {
+        setNotifMessage(null);
+        setNotifType(null);
+      }, 5000);
+      return;
     }
 
     const id = blogs.length + 1;
@@ -65,11 +93,19 @@ const App = () => {
       likes: 0,
     };
 
-    blogsService.create(blogObject).then((res) => {
+    blogsService.create(blogObject).then((res: BlogType) => {
       setBlogs(blogs.concat(res));
+      console.log(res);
       setTitle("");
       setAuthor("");
       setUrl("");
+
+      setNotifMessage(`a new blog ${res.title} by ${user?.name} added `);
+      setNotifType("success");
+      setTimeout(() => {
+        setNotifMessage(null);
+        setNotifType(null);
+      }, 5000);
     });
   };
 
@@ -183,7 +219,7 @@ const App = () => {
           </button>
         )}
       </div>
-
+      <Notification message={notifMessage} type={notifType} />
       <div className="mb-5">{user ? BlogForm() : LoginForm()}</div>
 
       <div className="flex flex-col ">
