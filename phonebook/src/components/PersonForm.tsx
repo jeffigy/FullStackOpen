@@ -46,7 +46,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
 
         const changeContact = { ...contactPerson, number: newPerson.number };
         personService
-          .updatePerson(contactPerson!.id, changeContact as ContactPerson)
+          .updatePerson(changeContact as ContactPerson)
           .then((returnedPerson) => {
             sendNewDataToParent(
               persons.map((person) =>
@@ -66,20 +66,28 @@ const PersonForm: React.FC<PersonFormProps> = ({
         });
       }
     } else {
-      personService.newPerson(newContact).then((res) => {
-        sendNewDataToParent(persons.concat(res));
-        sendNotificationToParent({
-          message: `Added ${newPerson.name}`,
-          type: "success",
+      personService
+        .newPerson(newContact)
+        .then((res) => {
+          sendNewDataToParent(persons.concat(res));
+          sendNotificationToParent({
+            message: `Added ${newPerson.name}`,
+            type: "success",
+          });
+          setTimeout(() => {
+            sendNotificationToParent({ message: null, type: null });
+          }, 5000);
+          setNewPerson({
+            name: "",
+            number: "",
+          });
+        })
+        .catch((error: any) => {
+          sendNotificationToParent({
+            message: error.response.data.error.message,
+            type: error,
+          });
         });
-        setTimeout(() => {
-          sendNotificationToParent({ message: null, type: null });
-        }, 5000);
-        setNewPerson({
-          name: "",
-          number: "",
-        });
-      });
     }
   };
 

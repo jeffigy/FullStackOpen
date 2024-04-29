@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ContactPerson } from "../App";
-const baseUrl = "http://localhost:3001/persons";
+const baseUrl = "/api/persons";
 
 const getAllPerson = () => {
   const req = axios.get(baseUrl);
@@ -12,8 +12,8 @@ const newPerson = (data: ContactPerson) => {
   return req.then((res) => res.data);
 };
 
-const updatePerson = (id: string, data: ContactPerson) => {
-  const req = axios.put(`${baseUrl}/${id}`, data);
+const updatePerson = (data: ContactPerson) => {
+  const req = axios.put(`${baseUrl}`, data);
   return req.then((res) => res.data);
 };
 

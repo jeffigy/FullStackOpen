@@ -27,25 +27,28 @@ const Persons: React.FC<PersonsProps> = ({
     setList(persons);
   }, [persons]);
 
+  console.log(list);
+
   return (
     <div>
-      {list.map((person, index) => (
-        <p key={index}>
-          {person.name} {person.number}
-          <button
-            onClick={() => handleDelete(person.id)}
-            style={{
-              backgroundColor: "#ff4343",
-              border: "none",
-              padding: "5px 10px",
-              borderRadius: "5px",
-              marginLeft: "5px",
-            }}
-          >
-            Delete
-          </button>
-        </p>
-      ))}
+      {list &&
+        list.map((person, index) => (
+          <p key={index}>
+            {person.name} {person.number}
+            <button
+              onClick={() => handleDelete(person.id)}
+              style={{
+                backgroundColor: "#ff4343",
+                border: "none",
+                padding: "5px 10px",
+                borderRadius: "5px",
+                marginLeft: "5px",
+              }}
+            >
+              Delete
+            </button>
+          </p>
+        ))}
     </div>
   );
 };
