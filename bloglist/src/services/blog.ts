@@ -11,4 +11,15 @@ const getAll = () => {
   return req.then((res: any) => res.data);
 };
 
-export default { getAll, setToken };
+const create = (newObject: BlogType) => {
+  const config = {
+    headers: {
+      Authorization: token,
+    },
+  };
+  console.log(config);
+  const req = axios.post(BlogsURL, newObject, config);
+  return req.then((res) => res.data);
+};
+
+export default { getAll, setToken, create };

@@ -25,7 +25,7 @@ const App = () => {
       setUser(user);
       blogsService.setToken(user.token);
     }
-  });
+  }, []);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,9 +49,29 @@ const App = () => {
     setUser(null);
   };
 
-  // const newBlog = async (e) => {
+  const newBlog = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  // }
+    if (title === "" || author === "" || url === "") {
+      return console.log("all fields are required");
+    }
+
+    const id = blogs.length + 1;
+    const blogObject: BlogType = {
+      title,
+      author,
+      url,
+      id: id.toString(),
+      likes: 0,
+    };
+
+    blogsService.create(blogObject).then((res) => {
+      setBlogs(blogs.concat(res));
+      setTitle("");
+      setAuthor("");
+      setUrl("");
+    });
+  };
 
   const LoginForm = () => {
     return (
@@ -98,7 +118,7 @@ const App = () => {
     return (
       <form
         className="bg-white max-w-screen-sm p-6 rounded-md"
-        // onSubmit={handle}
+        onSubmit={newBlog}
       >
         <div className="mb-1">
           <p className="text-md font-semibold text-slate-600"> Title:</p>
@@ -168,7 +188,7 @@ const App = () => {
 
       <div className="flex flex-col ">
         {blogs.map((blog: BlogType) => (
-          <BlogCard blog={blog} />
+          <BlogCard key={blog.id} blog={blog} />
         ))}
       </div>
     </div>
@@ -179,7 +199,7 @@ export default App;
 
 const BlogCard: React.FC<{ blog: BlogType }> = ({ blog }) => {
   return (
-    <div key={blog.id} className="p-5 bg-white mb-3 rounded-md">
+    <div className="p-5 bg-white mb-3 rounded-md">
       <div className="">{blog.title}</div>
       <div className="flex w-full">
         <p>{blog.likes}</p>
