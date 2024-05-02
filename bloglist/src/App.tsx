@@ -3,14 +3,13 @@ import blogsService from "./services/blog";
 import { BlogType, LoggedUserType } from "./types";
 import loginServices from "./services/login";
 import Notification from "./components/Notification";
+import BlogForm from "./components/BlogForm";
 
 const App = () => {
   const [blogs, setBlogs] = useState<BlogType[]>([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
+
   const [notifMessage, setNotifMessage] = useState<string | null>("");
   const [notifType, setNotifType] = useState<
     "success" | "error" | null | undefined
@@ -71,34 +70,9 @@ const App = () => {
     setUser(null);
   };
 
-  const newBlog = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (title === "" || author === "" || url === "") {
-      setNotifMessage("All fields are required");
-      setNotifType("error");
-      setTimeout(() => {
-        setNotifMessage(null);
-        setNotifType(null);
-      }, 5000);
-      return;
-    }
-
-    const id = blogs.length + 1;
-    const blogObject: BlogType = {
-      title,
-      author,
-      url,
-      id: id.toString(),
-      likes: 0,
-    };
-
+  const newBlog = async (blogObject: any) => {
     blogsService.create(blogObject).then((res: BlogType) => {
       setBlogs(blogs.concat(res));
-      console.log(res);
-      setTitle("");
-      setAuthor("");
-      setUrl("");
 
       setNotifMessage(`a new blog ${res.title} by ${user?.name} added `);
       setNotifType("success");
@@ -150,59 +124,6 @@ const App = () => {
     );
   };
 
-  const BlogForm = () => {
-    return (
-      <form
-        className="bg-white max-w-screen-sm p-6 rounded-md"
-        onSubmit={newBlog}
-      >
-        <div className="mb-1">
-          <p className="text-md font-semibold text-slate-600"> Title:</p>
-          <input
-            className="w-full border border-slate-600 rounded-md p-1"
-            type="text"
-            id="title"
-            value={title}
-            onChange={({ target }) => setTitle(target.value)}
-          />
-        </div>
-        <div className="mb-1">
-          <label htmlFor="" className="text-md font-semibold text-slate-600">
-            Author:
-          </label>
-          <input
-            type="text"
-            id="author"
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
-            className="w-full border border-slate-600 rounded-md p-1"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="" className="text-md font-semibold text-slate-600">
-            Url:
-          </label>
-          <input
-            type="text"
-            id="url"
-            className="w-full border border-slate-600 rounded-md p-1"
-            value={url}
-            onChange={({ target }) => setUrl(target.value)}
-          />
-        </div>
-
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            className="px-3 py-2 rounded-md text-sm bg-blue-600 text-white hover:bg-blue-700 focus:bg-blue-800"
-          >
-            Add Blog
-          </button>
-        </div>
-      </form>
-    );
-  };
-
   return (
     <div className="flex flex-col min-h-screen bg-slate-100 items-center w-full">
       <div className="flex w-full justify-between mb-5 px-3 py-2 ">
@@ -220,7 +141,9 @@ const App = () => {
         )}
       </div>
       <Notification message={notifMessage} type={notifType} />
-      <div className="mb-5">{user ? BlogForm() : LoginForm()}</div>
+      <div className="mb-5">
+        {user ? <BlogForm createBlog={newBlog} /> : LoginForm()}
+      </div>
 
       <div className="flex flex-col ">
         {blogs.map((blog: BlogType) => (
