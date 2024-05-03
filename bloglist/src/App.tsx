@@ -4,6 +4,7 @@ import { BlogType, LoggedUserType } from "./types";
 import loginServices from "./services/login";
 import Notification from "./components/Notification";
 import BlogForm from "./components/BlogForm";
+import Blog from "./components/Blog";
 
 const App = () => {
   const [blogs, setBlogs] = useState<BlogType[]>([]);
@@ -147,7 +148,7 @@ const App = () => {
 
       <div className="flex flex-col ">
         {blogs.map((blog: BlogType) => (
-          <BlogCard key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} />
         ))}
       </div>
     </div>
@@ -155,15 +156,3 @@ const App = () => {
 };
 
 export default App;
-
-const BlogCard: React.FC<{ blog: BlogType }> = ({ blog }) => {
-  return (
-    <div className="p-5 bg-white mb-3 rounded-md">
-      <div className="">{blog.title}</div>
-      <div className="flex w-full">
-        <p>{blog.likes}</p>
-        <p>{blog.author}</p>
-      </div>
-    </div>
-  );
-};
