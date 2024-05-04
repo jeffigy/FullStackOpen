@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { BlogType } from "../types";
-import blogServices from "../services/blog";
 type BlogProps = {
   blog: BlogType;
   updateBlog: any;
@@ -17,7 +16,7 @@ const Blog: React.FC<BlogProps> = ({ blog, updateBlog }) => {
   return (
     <div className="p-5 bg-white mb-3 rounded-md text-slate-500">
       <div className="font-bold">
-        {blog.title}{" "}
+        {blog.title}
         <span>
           <button
             onClick={() => setShowDetails(!showDetails)}
@@ -42,6 +41,7 @@ const Blog: React.FC<BlogProps> = ({ blog, updateBlog }) => {
         </div>
         <p>{blog.author}</p>
       </div>
+      <p>posted by: {blog.user!.name}</p>
     </div>
   );
 };

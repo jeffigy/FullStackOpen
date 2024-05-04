@@ -1,5 +1,5 @@
 // Toggable.tsx
-import { forwardRef, useImperativeHandle, useRef, useState } from "react";
+import { forwardRef, useImperativeHandle, useState } from "react";
 
 type TogglableProps = {
   buttonLabel: string;

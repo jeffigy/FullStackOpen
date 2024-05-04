@@ -146,6 +146,7 @@ const App = () => {
       </form>
     );
   };
+  console.log(blogs);
 
   const blogForm = () => {
     return (
