@@ -1,21 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import blogsService from "./services/blog";
 import { BlogType, LoggedUserType } from "./types";
 import loginServices from "./services/login";
 import Notification from "./components/Notification";
 import BlogForm from "./components/BlogForm";
 import Blog from "./components/Blog";
+import Togglable from "./components/toggable";
 
 const App = () => {
   const [blogs, setBlogs] = useState<BlogType[]>([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
   const [notifMessage, setNotifMessage] = useState<string | null>("");
   const [notifType, setNotifType] = useState<
     "success" | "error" | null | undefined
   >();
   const [user, setUser] = useState<LoggedUserType | null>(null);
+  const blogFormRef = useRef();
 
   useEffect(() => {
     blogsService.getAll().then((initialBlogs: BlogType[]) => {
@@ -72,6 +73,7 @@ const App = () => {
   };
 
   const newBlog = async (blogObject: any) => {
+    blogFormRef.current!.toggleVisibility();
     blogsService.create(blogObject).then((res: BlogType) => {
       setBlogs(blogs.concat(res));
 
@@ -125,6 +127,14 @@ const App = () => {
     );
   };
 
+  const blogForm = () => {
+    return (
+      <Togglable buttonLabel="New Blog" ref={blogFormRef}>
+        <BlogForm createBlog={newBlog} />
+      </Togglable>
+    );
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-slate-100 items-center w-full">
       <div className="flex w-full justify-between mb-5 px-3 py-2 ">
@@ -142,9 +152,7 @@ const App = () => {
         )}
       </div>
       <Notification message={notifMessage} type={notifType} />
-      <div className="mb-5">
-        {user ? <BlogForm createBlog={newBlog} /> : LoginForm()}
-      </div>
+      <div className="mb-5">{user ? blogForm() : LoginForm()}</div>
 
       <div className="flex flex-col ">
         {blogs.map((blog: BlogType) => (

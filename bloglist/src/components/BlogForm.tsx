@@ -20,6 +20,9 @@ const BlogForm: React.FC<BlogFormProps> = ({ createBlog }) => {
     };
 
     createBlog(blogObject);
+    setTitle("");
+    setAuthor("");
+    setUrl("");
   };
   return (
     <form
