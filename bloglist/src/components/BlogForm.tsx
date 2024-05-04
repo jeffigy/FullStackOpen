@@ -24,6 +24,7 @@ const BlogForm: React.FC<BlogFormProps> = ({ createBlog }) => {
     setAuthor("");
     setUrl("");
   };
+
   return (
     <form
       className="bg-white max-w-screen-sm p-6 rounded-md"

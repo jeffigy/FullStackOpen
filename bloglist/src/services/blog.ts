@@ -22,4 +22,9 @@ const create = (newObject: BlogType) => {
   return req.then((res) => res.data);
 };
 
-export default { getAll, setToken, create };
+const update = (id: string, blogObject: BlogType) => {
+  const req = axios.put(`${BlogsURL}/${id}`, blogObject);
+  return req.then((res) => res.data);
+};
+
+export default { getAll, setToken, create, update };

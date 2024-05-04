@@ -86,6 +86,26 @@ const App = () => {
     });
   };
 
+  const updateBlog = async (blogObject: BlogType) => {
+    const blog = blogs.find((n) => n.id === blogObject.id);
+    const increaseLike = { ...blog, likes: blog!.likes + 1 };
+    blogsService
+      .update(blogObject.id, increaseLike)
+      .then((returnedBlog) => {
+        setBlogs(
+          blogs.map((blog) => (blog.id !== blogObject.id ? blog : returnedBlog))
+        );
+      })
+      .catch((error) => {
+        setNotifMessage(`something went wrong ${error}`);
+        setNotifType("error");
+        setTimeout(() => {
+          setNotifMessage(null);
+          setNotifType(null);
+        }, 5000);
+      });
+  };
+
   const LoginForm = () => {
     return (
       <form
@@ -156,7 +176,7 @@ const App = () => {
 
       <div className="flex flex-col ">
         {blogs.map((blog: BlogType) => (
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
         ))}
       </div>
     </div>
