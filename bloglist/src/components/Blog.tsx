@@ -3,9 +3,10 @@ import { BlogType } from "../types";
 type BlogProps = {
   blog: BlogType;
   updateBlog: any;
+  removeBlog: any;
 };
 
-const Blog: React.FC<BlogProps> = ({ blog, updateBlog }) => {
+const Blog: React.FC<BlogProps> = ({ blog, updateBlog, removeBlog }) => {
   const [showDetails, setShowDetails] = useState(false);
   const details = showDetails ? "block" : "hidden";
 
@@ -13,6 +14,11 @@ const Blog: React.FC<BlogProps> = ({ blog, updateBlog }) => {
     e.preventDefault();
     updateBlog(blog);
   };
+
+  const deleteBlog = () => {
+    removeBlog(blog);
+  };
+
   return (
     <div className="p-5 bg-white mb-3 rounded-md text-slate-500">
       <div className="font-bold">
@@ -42,6 +48,12 @@ const Blog: React.FC<BlogProps> = ({ blog, updateBlog }) => {
         <p>{blog.author}</p>
       </div>
       <p>posted by: {blog.user!.name}</p>
+      <button
+        onClick={deleteBlog}
+        className="border px-3 py-1 text-xs bg-red-600 hover:bg-red-700 focus:bg-red-800 text-white rounded-md"
+      >
+        Delete
+      </button>
     </div>
   );
 };

@@ -27,4 +27,9 @@ const update = (id: string, blogObject: BlogType) => {
   return req.then((res) => res.data);
 };
 
-export default { getAll, setToken, create, update };
+const deleteBlog = (id: string) => {
+  const req = axios.delete(`${BlogsURL}/${id}`);
+  return req.then((res) => res.data);
+};
+
+export default { getAll, setToken, create, update, deleteBlog };

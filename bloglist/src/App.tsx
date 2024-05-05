@@ -18,23 +18,6 @@ const App = () => {
   const [user, setUser] = useState<LoggedUserType | null>(null);
   const blogFormRef = useRef();
 
-  useEffect(() => {
-    blogsService.getAll().then((initialBlogs: BlogType[]) => {
-      setBlogs(initialBlogs);
-    });
-  }, []);
-
-  useEffect(() => {
-    const userFromLocalStorage = window.localStorage.getItem("user");
-    if (userFromLocalStorage) {
-      const user = JSON.parse(userFromLocalStorage);
-      setUser(user);
-      blogsService.setToken(user.token);
-    }
-  }, []);
-
-  const filteredByLkes = blogs.sort((a, b) => b.likes - a.likes);
-
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -69,7 +52,7 @@ const App = () => {
     }
   };
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     window.localStorage.removeItem("user");
     setUser(null);
   };
@@ -107,6 +90,40 @@ const App = () => {
         }, 5000);
       });
   };
+
+  const deleteBlog = async (blog: BlogType) => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.user!.name}`))
+      blogsService
+        .deleteBlog(blog.id!)
+        .then((deletedBlog) => {
+          setBlogs(blogs.filter((blog) => blog.id === deletedBlog.id));
+        })
+        .catch((error) => {
+          setNotifMessage(`something went wrong ${error}`);
+          setNotifType("error");
+          setTimeout(() => {
+            setNotifMessage(null);
+            setNotifType(null);
+          }, 5000);
+        });
+  };
+
+  const filteredByLkes = blogs.sort((a, b) => b.likes - a.likes);
+
+  useEffect(() => {
+    blogsService.getAll().then((initialBlogs: BlogType[]) => {
+      setBlogs(initialBlogs);
+    });
+  }, []);
+
+  useEffect(() => {
+    const userFromLocalStorage = window.localStorage.getItem("user");
+    if (userFromLocalStorage) {
+      const user = JSON.parse(userFromLocalStorage);
+      setUser(user);
+      blogsService.setToken(user.token);
+    }
+  }, []);
 
   const LoginForm = () => {
     return (
@@ -178,7 +195,12 @@ const App = () => {
 
       <div className="flex flex-col ">
         {filteredByLkes.map((blog: BlogType) => (
-          <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+          <Blog
+            key={blog.id}
+            blog={blog}
+            updateBlog={updateBlog}
+            removeBlog={deleteBlog}
+          />
         ))}
       </div>
     </div>
