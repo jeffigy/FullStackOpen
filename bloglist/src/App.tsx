@@ -33,6 +33,8 @@ const App = () => {
     }
   }, []);
 
+  const filteredByLkes = blogs.sort((a, b) => b.likes - a.likes);
+
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -146,7 +148,6 @@ const App = () => {
       </form>
     );
   };
-  console.log(blogs);
 
   const blogForm = () => {
     return (
@@ -176,7 +177,7 @@ const App = () => {
       <div className="mb-5">{user ? blogForm() : LoginForm()}</div>
 
       <div className="flex flex-col ">
-        {blogs.map((blog: BlogType) => (
+        {filteredByLkes.map((blog: BlogType) => (
           <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
         ))}
       </div>
