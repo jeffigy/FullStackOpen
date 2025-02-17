@@ -1,0 +1,25 @@
+# get all notes
+GET http://localhost:3500/api/notes
+###
+
+# create a new note
+POST http://localhost:3500/api/notes
+Content-Type: application/json
+
+{
+    "content": "postman is good in testing backend",
+    "important": true   
+}
+### 
+
+# get a note
+GET http://localhost:3500/api/notes/1
+###
+
+# update a note
+PATCH http://localhost:3500/api/notes/1
+###
+
+# delete a note
+DELETE http://localhost:3500/api/notes/1
+###
