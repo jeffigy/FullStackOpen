@@ -1,5 +1,5 @@
 import express, { json } from "express";
-import apiRoute from "./routes/index.mjs";
+import apiRoute from "./routes";
 
 const app = express();
 
