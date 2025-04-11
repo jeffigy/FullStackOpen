@@ -5,11 +5,16 @@ import {
   handleGetPersons,
   handleUpdatePerson,
 } from "@/controllers/person.controller";
+import validateSchema from "@/middlewares/validate-schema.middleware";
+import { personInsertSchema } from "@/schemas/person.schema";
 import { Router } from "express";
 
 const personRoute = Router();
 
-personRoute.route("/").get(handleGetPersons).post(handleCreatePerson);
+personRoute
+  .route("/")
+  .get(handleGetPersons)
+  .post(validateSchema(personInsertSchema), handleCreatePerson);
 personRoute
   .route("/:id")
   .get(handleGetPerson)

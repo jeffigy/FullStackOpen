@@ -37,13 +37,6 @@ export const handleGetNote = async (req: Request, res: Response) => {
 };
 
 export const handleCreateNote = async (req: Request, res: Response) => {
-  const { content } = req.body;
-
-  if (!content) {
-    res.status(400).json({ message: "Content is required" });
-    return;
-  }
-
   await createNote(req.body);
 
   res.status(201).json({ message: "Note created" });
