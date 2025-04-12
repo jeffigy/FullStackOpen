@@ -1,13 +1,15 @@
 import db from "@/db";
 import { notesTable } from "@/db/schema";
-import { NoteInsert } from "@/types/note.type";
+import { NoteInsert, NoteSelect } from "@/types/note.type";
 import { eq } from "drizzle-orm";
 
 export const findAllNotes = async () => {
   return await db.select().from(notesTable);
 };
 
-export const findNoteById = async (noteId: string) => {
+export const findNoteById = async (
+  noteId: string
+): Promise<NoteSelect | null> => {
   const [note] = await db
     .select()
     .from(notesTable)

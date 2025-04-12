@@ -1,18 +1,18 @@
-import { Request, Response, NextFunction } from "express";
-import { ZodSchema, ZodError } from "zod";
+import { NextFunction, Request, Response } from "express";
+import { ZodError, ZodSchema } from "zod";
 
 const validateSchema =
-  (schema: ZodSchema<any>) =>
+  (schema: ZodSchema<unknown>) =>
   (req: Request, res: Response, next: NextFunction) => {
     try {
       schema.parse({
-        body: req.body,
-        query: req.query,
+        body: req.body as unknown,
         params: req.params,
+        query: req.query,
       });
 
       next();
-    } catch (error) {
+    } catch (error: unknown) {
       if (error instanceof ZodError) {
         for (const issue of error.issues) {
           res.status(400).json({ message: issue.message });

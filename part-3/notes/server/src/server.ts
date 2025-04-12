@@ -1,7 +1,12 @@
 import "express-async-errors";
-import app from "./app";
 import { PORT } from "@/config/env.config";
 
-app.listen(PORT, () => {
-  console.log(`App is running @ port ${PORT}`);
-});
+import app from "./app";
+import { connectDb } from "./db";
+
+void (async () => {
+  await connectDb();
+  app.listen(PORT, () => {
+    console.log(`App is running @ port ${PORT}`);
+  });
+})();

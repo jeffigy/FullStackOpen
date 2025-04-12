@@ -6,7 +6,7 @@ import {
   handleUpdateNote,
 } from "@/controllers/note.controller";
 import validateSchema from "@/middlewares/validate-schema.middleware";
-import { noteInsertSchema } from "@/schemas/note.schema";
+import { noteInsertSchema, noteUpdateSchema } from "@/schemas/note.schema";
 import { Router } from "express";
 
 const noteRoute = Router();
@@ -18,7 +18,7 @@ noteRoute
 noteRoute
   .route("/:id")
   .get(handleGetNote)
-  .patch(handleUpdateNote)
+  .patch(validateSchema(noteUpdateSchema), handleUpdateNote)
   .delete(handleDeleteNote);
 
 export default noteRoute;

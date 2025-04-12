@@ -5,6 +5,7 @@ import {
   findNoteById,
   updateNote,
 } from "@/services/note.service";
+import { NoteInsert } from "@/types/note.type";
 import { Request, Response } from "express";
 
 export const handleGetNotes = async (req: Request, res: Response) => {
@@ -36,13 +37,19 @@ export const handleGetNote = async (req: Request, res: Response) => {
   res.json(note);
 };
 
-export const handleCreateNote = async (req: Request, res: Response) => {
+export const handleCreateNote = async (
+  req: Request<unknown, unknown, NoteInsert>,
+  res: Response
+) => {
   await createNote(req.body);
 
   res.status(201).json({ message: "Note created" });
 };
 
-export const handleUpdateNote = async (req: Request, res: Response) => {
+export const handleUpdateNote = async (
+  req: Request<{ id: string }, unknown, NoteInsert>,
+  res: Response
+) => {
   const { id } = req.params;
   const { content } = req.body;
 

@@ -1,4 +1,5 @@
 import { Router } from "express";
+
 import noteRoute from "./note.route";
 
 const apiRoute = Router();

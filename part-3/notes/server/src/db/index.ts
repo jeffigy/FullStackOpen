@@ -1,6 +1,11 @@
 import { DATABASE_URL } from "@/config/env.config";
-import { Pool } from "pg";
 import { drizzle } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
+
+interface NowRow {
+  now: string;
+}
+
 import * as schema from "./schema";
 const pool = new Pool({
   connectionString: DATABASE_URL,
@@ -9,7 +14,7 @@ const pool = new Pool({
 export const connectDb = async () => {
   try {
     const client = await pool.connect();
-    const { rows } = await pool.query("SELECT NOW()");
+    const { rows } = await pool.query<NowRow>("SELECT NOW()");
     console.log("Connected to db", rows[0].now);
     client.release();
   } catch (error) {
