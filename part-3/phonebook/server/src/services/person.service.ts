@@ -1,13 +1,15 @@
 import db from "@/db";
 import { personsTable } from "@/db/schema";
-import { PersonInsert } from "@/types/person.type";
+import { PersonInsert, PersonSelect } from "@/types/person.type";
 import { eq } from "drizzle-orm";
 
 export const findAllPersons = async () => {
   return await db.select().from(personsTable);
 };
 
-export const findPersonById = async (personId: string) => {
+export const findPersonById = async (
+  personId: string
+): Promise<null | PersonSelect> => {
   const [person] = await db
     .select()
     .from(personsTable)

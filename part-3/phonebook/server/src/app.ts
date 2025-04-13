@@ -1,8 +1,6 @@
 import express, { json } from "express";
-import { connectDb } from "./db";
-import apiRoute from "./routes";
 
-connectDb();
+import apiRoute from "./routes";
 
 const app = express();
 

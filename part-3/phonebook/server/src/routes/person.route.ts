@@ -6,7 +6,10 @@ import {
   handleUpdatePerson,
 } from "@/controllers/person.controller";
 import validateSchema from "@/middlewares/validate-schema.middleware";
-import { personInsertSchema } from "@/schemas/person.schema";
+import {
+  createPersonSchema,
+  updatePersonSchema,
+} from "@/schemas/person.schema";
 import { Router } from "express";
 
 const personRoute = Router();
@@ -14,11 +17,11 @@ const personRoute = Router();
 personRoute
   .route("/")
   .get(handleGetPersons)
-  .post(validateSchema(personInsertSchema), handleCreatePerson);
+  .post(validateSchema(createPersonSchema), handleCreatePerson);
 personRoute
   .route("/:id")
   .get(handleGetPerson)
-  .patch(handleUpdatePerson)
+  .patch(validateSchema(updatePersonSchema), handleUpdatePerson)
   .delete(handleDeletePerson);
 
 export default personRoute;

@@ -12,6 +12,8 @@ export const noteInsertSchema = z.object({
   }),
 });
 
+export type NoteInsert = z.infer<typeof noteInsertSchema>;
+
 export const noteUpdateSchema = noteInsertSchema.extend({
   params: z.object({
     id: z

@@ -1,3 +1,4 @@
+import { CreatePerson, UpdatePerson } from "@/schemas/person.schema";
 import {
   createPerson,
   deletePerson,
@@ -31,14 +32,21 @@ export const handleGetPerson = async (req: Request, res: Response) => {
   res.json(person);
 };
 
-export const handleCreatePerson = async (req: Request, res: Response) => {
+export const handleCreatePerson = async (
+  req: Request<unknown, unknown, CreatePerson["body"]>,
+  res: Response
+) => {
   await createPerson(req.body);
 
   res.status(201).json({ message: "Person created" });
 };
 
-export const handleUpdatePerson = async (req: Request, res: Response) => {
+export const handleUpdatePerson = async (
+  req: Request<UpdatePerson["params"], unknown, UpdatePerson["body"]>,
+  res: Response
+) => {
   const { id } = req.params;
+  const value = req.body;
 
   const foundPerson = await findPersonById(id);
 
@@ -47,7 +55,7 @@ export const handleUpdatePerson = async (req: Request, res: Response) => {
     return;
   }
 
-  await updatePerson(req.body, id);
+  await updatePerson(value, id);
 
   res.json({ message: "Person updated" });
 };
