@@ -9,4 +9,5 @@ export default {
     prefix: "<rootDir>/",
   }),
   setupFiles: ["tsconfig-paths/register"],
+  testMatch: ["**/?(*.)+(test).[jt]s?(x)"],
 };
