@@ -99,4 +99,20 @@ describe("When there are some notes saved initially", () => {
       assert.strictEqual(notesAtEnd.length, initialNotes.length);
     });
   });
+
+  describe("deletion of a note", () => {
+    test("succeeds with status code 204 if id is valid", async () => {
+      const notesAtStart = await notesInDb();
+      const noteToDelete = notesAtStart[0];
+
+      await api.delete(`/api/notes/${noteToDelete.noteId}`).expect(200);
+
+      const notesAtEnd = await notesInDb();
+
+      assert.strictEqual(notesAtEnd.length, initialNotes.length - 1);
+
+      const contents = notesAtEnd.map((r) => r.content);
+      assert(!contents.includes(noteToDelete.content));
+    });
+  });
 });

@@ -2,7 +2,7 @@ import app from "@/app";
 import supertest from "supertest";
 import db from "@/db";
 import { personsTable } from "@/db/schema";
-import { PersonInsert } from "@/types/person.type";
+import { PersonInsert, PersonSelect } from "@/types/person.type";
 import { clearDb, initialPersons, personsInDb } from "./test-helper";
 
 const api = supertest(app);
@@ -84,7 +84,7 @@ describe("Person API", () => {
   });
 
   // GET /api/persons/:id
-  describe("Viewing a specific note ", () => {
+  describe("Viewing a specific person", () => {
     test("succeeds with a valid id", async () => {
       const persons = await personsInDb();
 
@@ -100,6 +100,28 @@ describe("Person API", () => {
       const nonExistingId = "5a3d5da59070081a82a3445";
 
       const res = await api.get(`/api/persons/${nonExistingId}`);
+      expect(res.statusCode).toBe(404);
+    });
+  });
+
+  describe("Deleting a person", () => {
+    test("succeeds with a valid id", async () => {
+      const personsAtStart = await personsInDb();
+      const personToDelete = personsAtStart[1];
+      const res = await api.delete(`/api/persons/${personToDelete.id}`);
+
+      const personsAtEnd = await personsInDb();
+      const contents = personsAtEnd.map((person: PersonSelect) => person.name);
+
+      expect(res.statusCode).toBe(200);
+      expect(personsAtEnd.length).toEqual(initialPersons.length - 1);
+      expect(contents.includes(personToDelete.name)).toBeFalsy();
+    });
+
+    test("fails with statusCode 404 if person does not exist", async () => {
+      const nonExistingId = "5a3d5da59070081a82a3445";
+
+      const res = await api.delete(`/api/persons/${nonExistingId}`);
       expect(res.statusCode).toBe(404);
     });
   });
