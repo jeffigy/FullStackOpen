@@ -1,4 +1,4 @@
-import "express-async-errors";
+
 import { PORT } from "@/config/env.config";
 
 import app from "./app";

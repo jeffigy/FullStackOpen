@@ -1,0 +1,30 @@
+import { string, z } from "zod";
+
+const baseSchema = z.object({
+  password: string({
+    invalid_type_error: "Password must be a string",
+    required_error: "Password is required",
+  }).min(1, "Password must contain at at least 1 character"),
+  username: string({
+    invalid_type_error: "Username must be a string",
+    required_error: "Username is required",
+  }).min(1, "Username must contain at at least 1 character"),
+});
+
+const extendedSchema = baseSchema.extend({
+  name: string({
+    invalid_type_error: "Name must be a string",
+    required_error: "Name is required",
+  }).min(1, "Name must contain at at least 1 character"),
+});
+
+export const signUpSchema = z.object({
+  body: extendedSchema,
+});
+
+export const logInSchema = z.object({
+  body: baseSchema,
+});
+
+export type LogIn = z.infer<typeof logInSchema>;
+export type SignUp = z.infer<typeof signUpSchema>;

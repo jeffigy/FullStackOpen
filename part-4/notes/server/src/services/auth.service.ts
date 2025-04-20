@@ -10,3 +10,7 @@ export const createUser = async (payload: UserInsert) => {
 
   return createdUser;
 };
+
+export const findAllUsers = async () => {
+  return await db.select().from(noteUsersTable);
+};

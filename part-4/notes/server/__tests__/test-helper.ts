@@ -1,3 +1,4 @@
+import { findAllUsers } from "@/services/auth.service";
 import { createNote, deleteNote, findAllNotes } from "@/services/note.service";
 import { NoteInsert } from "@/types/note.type";
 
@@ -22,4 +23,8 @@ export const nonExistingId = async () => {
 
 export const notesInDb = async () => {
   return await findAllNotes();
+};
+
+export const usersInDb = async () => {
+  return await findAllUsers();
 };
