@@ -31,7 +31,7 @@ describe("when there is initially one user in db", () => {
     };
 
     await api
-      .post("/api/auth/signup")
+      .post("/api/users")
       .send(newUser)
       .expect(201)
       .expect("Content-Type", /application\/json/);
@@ -39,7 +39,7 @@ describe("when there is initially one user in db", () => {
     const usersAtEnd = await usersInDb();
     assert.strictEqual(usersAtEnd.length, usersAtStart.length + 1);
 
-    const usernames = usersAtEnd.map((u) => u.username);
+    const usernames = usersAtEnd.map((u) => u.note_users.username);
     assert(usernames.includes(newUser.username));
   });
 
@@ -53,7 +53,7 @@ describe("when there is initially one user in db", () => {
     };
 
     const result = await api
-      .post("/api/auth/signup")
+      .post("/api/users")
       .send(newUser)
       .expect("Content-Type", /application\/json/);
     expect(result.statusCode).toBe(409);

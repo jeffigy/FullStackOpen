@@ -1,10 +1,13 @@
 import db from "@/db";
-import { notesTable } from "@/db/schema";
+import { notesTable, noteUsersTable } from "@/db/schema";
 import { NoteInsert, NoteSelect } from "@/types/note.type";
 import { eq } from "drizzle-orm";
 
 export const findAllNotes = async () => {
-  return await db.select().from(notesTable);
+  return await db
+    .select()
+    .from(notesTable)
+    .rightJoin(noteUsersTable, eq(notesTable.userId, noteUsersTable.userId));
 };
 
 export const findNoteById = async (

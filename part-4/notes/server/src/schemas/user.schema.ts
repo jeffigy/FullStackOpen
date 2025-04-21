@@ -18,13 +18,8 @@ const extendedSchema = baseSchema.extend({
   }).min(1, "Name must contain at at least 1 character"),
 });
 
-export const signUpSchema = z.object({
+export const createUserSchema = z.object({
   body: extendedSchema,
 });
 
-export const logInSchema = z.object({
-  body: baseSchema,
-});
-
-export type LogIn = z.infer<typeof logInSchema>;
-export type SignUp = z.infer<typeof signUpSchema>;
+export type CreateUser = z.infer<typeof createUserSchema>;

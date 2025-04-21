@@ -1,4 +1,4 @@
-import { findAllUsers } from "@/services/auth.service";
+import { findAllUsers } from "@/services/user.service";
 import { createNote, deleteNote, findAllNotes } from "@/services/note.service";
 import { NoteInsert } from "@/types/note.type";
 
