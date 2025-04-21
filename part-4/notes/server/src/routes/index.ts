@@ -1,7 +1,7 @@
 import { Router } from "express";
 
-import noteRoute from "./note.route";
 import userRoute from "./auth.route";
+import noteRoute from "./note.route";
 
 const apiRoute = Router();
 

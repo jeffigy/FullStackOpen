@@ -1,16 +1,15 @@
-import { NextFunction, Request, Response } from "express";
-import { hash } from "bcryptjs";
-import { createUser } from "@/services/auth.service";
 import { LogIn, SignUp } from "@/schemas/auth.schema";
+import { createUser } from "@/services/auth.service";
+import { hash } from "bcryptjs";
+import { Request, Response } from "express";
 
 export const handleSignup = async (
   req: Request<unknown, unknown, SignUp["body"]>,
-  res: Response,
-  next: NextFunction
+  res: Response
 ) => {
-  const { username, name, password } = req.body;
+  const { name, password, username } = req.body;
   const passwordHash = await hash(password, 10);
-  await createUser({ username, name, passwordHash });
+  await createUser({ name, passwordHash, username });
   res.status(201).json({ message: "User created" });
 };
 

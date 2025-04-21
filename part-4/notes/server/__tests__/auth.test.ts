@@ -14,7 +14,7 @@ describe("when there is initially one user in db", () => {
     const passwordHash = await hash("sekret", 10);
     await db
       .insert(noteUsersTable)
-      .values({ name: "root-name", username: "root", passwordHash });
+      .values({ name: "root-name", passwordHash, username: "root" });
   });
 
   afterEach(async () => {
@@ -26,8 +26,8 @@ describe("when there is initially one user in db", () => {
 
     const newUser = {
       name: "Matti Luukkainen",
-      username: "mluukkai",
       password: "salainen",
+      username: "mluukkai",
     };
 
     await api
@@ -48,8 +48,8 @@ describe("when there is initially one user in db", () => {
 
     const newUser = {
       name: "Superuser",
-      username: "root",
       password: "salainen",
+      username: "root",
     };
 
     const result = await api

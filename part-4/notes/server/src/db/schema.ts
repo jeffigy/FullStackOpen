@@ -9,10 +9,10 @@ import {
 } from "drizzle-orm/pg-core";
 
 export const noteUsersTable = pgTable("note_users", {
-  username: text("username").unique().notNull(),
   name: text("name").notNull(),
   passwordHash: text("passwordHash").notNull(),
   userId: text("user_id").primaryKey().$defaultFn(createId),
+  username: text("username").unique().notNull(),
 });
 
 export const noteUsersRelations = relations(noteUsersTable, ({ many }) => ({

@@ -1,11 +1,12 @@
-import app from "../src/app";
-import supertest from "supertest";
-import { reset } from "drizzle-seed";
 import db from "@/db";
 import { notesTable } from "@/db/schema";
-import { initialNotes, nonExistingId, notesInDb } from "./test-helper";
-import assert from "node:assert";
 import { NoteSelect } from "@/types/note.type";
+import { reset } from "drizzle-seed";
+import assert from "node:assert";
+import supertest from "supertest";
+
+import app from "../src/app";
+import { initialNotes, nonExistingId, notesInDb } from "./test-helper";
 
 const api = supertest(app);
 
