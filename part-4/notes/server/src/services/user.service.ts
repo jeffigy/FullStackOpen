@@ -18,3 +18,13 @@ export const findAllUsers = async () => {
     .from(noteUsersTable)
     .leftJoin(notesTable, eq(noteUsersTable.userId, notesTable.userId));
 };
+
+export const findUserByUsername = async (username: string) => {
+  const [user] = await db
+    .select()
+    .from(noteUsersTable)
+    .leftJoin(notesTable, eq(noteUsersTable.userId, notesTable.userId))
+    .where(eq(noteUsersTable.username, username));
+
+  return user;
+};

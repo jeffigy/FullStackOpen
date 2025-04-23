@@ -27,7 +27,7 @@ export const notesTable = pgTable("notes", {
   userId: text("user_id"),
 });
 
-export const notesRElations = relations(notesTable, ({ one }) => ({
+export const notesRelations = relations(notesTable, ({ one }) => ({
   user: one(noteUsersTable, {
     fields: [notesTable.userId],
     references: [noteUsersTable.userId],

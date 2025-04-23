@@ -41,7 +41,11 @@ export const handleCreateNote = async (
   req: Request<unknown, unknown, CreateNote["body"]>,
   res: Response
 ) => {
-  await createNote(req.body);
+  const userId = req.userId;
+  console.log(userId);
+
+  const { content, important } = req.body;
+  await createNote({ userId, content, important });
 
   res.status(201).json({ message: "Note created" });
 };

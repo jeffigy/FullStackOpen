@@ -1,6 +1,6 @@
 import { string, z } from "zod";
 
-const baseSchema = z.object({
+export const baseUserSchema = z.object({
   password: string({
     invalid_type_error: "Password must be a string",
     required_error: "Password is required",
@@ -11,7 +11,7 @@ const baseSchema = z.object({
   }).min(1, "Username must contain at at least 1 character"),
 });
 
-const extendedSchema = baseSchema.extend({
+const extendedSchema = baseUserSchema.extend({
   name: string({
     invalid_type_error: "Name must be a string",
     required_error: "Name is required",
